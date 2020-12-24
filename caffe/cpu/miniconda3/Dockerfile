@@ -15,4 +15,16 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.bk  \
     && rm ~/miniconda3.sh                               
 ENV PATH /opt/miniconda3/bin:$PATH
 
-RUN which conda && conda info -e
+# set sh bash in ubuntu to use source cmd
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# create caffe-cpu env
+RUN conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/ \
+    && conda config --set show_channel_urls yes            \
+    && conda create -n caffe-cpu python=3.8 -y             \
+    && source activate caffe-cpu                           \
+    && conda info|egrep "conda version|active environment" \
+# install jupyter notebook
+    && conda install jupyter -y                 
+
+COPY notebook-run.sh /root
