@@ -1,0 +1,1 @@
+目前仅实现了miniconda的jupyter的安装和联通，支持跨机访问；
